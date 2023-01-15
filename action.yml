@@ -1,0 +1,36 @@
+name: sast-report
+description: reporting sast result
+runs:
+  using: node16
+  main: dist/action/index.js
+inputs:
+  json_file:
+    default: results.json
+    description: "The scan result of json file to be uploaded to database."
+  url:
+    required: true
+    description: "Database url"
+  user:
+    required: false
+    description: "Username"
+  password:
+    required: false
+    description: "Password"
+  token:
+    required: false
+    description: "Token"
+  token_type:
+    required: false
+    description: "Token type, eg: bearer, apikey"
+    default: "ApiKey"
+  ca_fingerprint:
+    required: false
+    description: ""
+  disable_ssl_validation:
+    required: false
+    description: ""
+    default: "false"
+  kibana_base_path:
+    required: true
+    description: ""
+    

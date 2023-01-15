@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  devcontainer:
+    image: mcr.microsoft.com/vscode/devcontainers/typescript-node:16-bullseye
+    volumes:
+      - ../..:/workspaces:cached
+    network_mode: service:elastic
+    command: sleep infinity
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    environment: 
+      - node.name=elastic
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    mem_limit: ${MEM_LIMIT}
+    networks:
+      - dev-sast-report
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:9200 | grep -q 'HTTP/1.1 200 OK'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+  kibana:
+    depends_on:
+      elastic:
+        condition: service_healthy
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    volumes:
+      - kibanadata:/usr/share/kibana/data
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://elastic:9200
+      - xpack.security.enabled=false
+    mem_limit: ${MEM_LIMIT}
+    network_mode: service:elastic
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 200 OK'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+networks:
+  dev-sast-report:
+volumes:
+  kibanadata:
+  esdata:

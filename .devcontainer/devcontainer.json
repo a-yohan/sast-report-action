@@ -1,0 +1,30 @@
+{
+	"name": "Dev",
+	"dockerComposeFile": "docker-compose.yaml",
+	"service": "devcontainer",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"settings": {
+		"yaml.schemas": {
+			"https://json.schemastore.org/github-action.json": "${workspaceFolder}/action.yaml"
+		},
+		"[typescript]": {
+			"editor.formatOnSave": true,
+			"files.eol": "\n"
+		},
+		"typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+		"typescript.format.insertSpaceAfterConstructor": true,
+		"eslint.validate": [
+			"typescript"
+		],
+		"typescript.tsdk": "node_modules/typescript/lib"
+	},
+	"extensions": [
+		"redhat.vscode-yaml",
+		"dbaeumer.vscode-eslint"
+	],
+	"forwardPorts": [
+		5601,
+		9200
+	],
+	"shutdownAction": "stopCompose"
+}

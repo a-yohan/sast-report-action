@@ -1,0 +1,17 @@
+*
+!.*ignore
+!.*rc.json
+!.devcontainer
+!.devcontainer/*
+!.github
+!.github/**/*
+!src
+!src/**/*
+!dist
+!dist/**/*
+!test
+!test/**/*
+!action.yml
+!package.json
+!package-lock.json
+!tsconfig.json
