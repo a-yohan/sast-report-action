@@ -1,0 +1,85 @@
+name: SAST Semgrep
+
+on:
+  workflow_call:
+    inputs:
+      json_file:
+        type: string
+        default: results.json
+        description: "The scan result of json file to be uploaded to database."
+      url:
+        type: string
+        required: true
+        description: "Database url"
+      user:
+        type: string
+        required: false
+        description: "Username"
+      password:
+        type: string
+        required: false
+        description: "Password"
+      token:
+        type: string
+        required: false
+        description: "Token"
+      token_type:
+        type: string
+        required: false
+        description: "Token type, eg: bearer, apikey"
+        default: "ApiKey"
+      ca_fingerprint:
+        type: string
+        required: false
+        description: ""
+      disable_ssl_validation:
+        type: boolean
+        required: false
+        description: ""
+        default: false
+      kibana_base_path:
+        type: string
+        required: true
+        description: ""
+
+jobs:
+  semgrep:
+    name: Scan
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    container:
+      image: returntocorp/semgrep
+    if: (github.actor != 'dependabot[bot]')
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Clone Rules
+        uses: actions/checkout@v3
+        with:
+          repository: a-yohan/sast-semgrep-rules
+          path: .semgrep
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Semgrep scan
+        run: semgrep scan -o ${{inputs.json_file}} --json || true
+
+      - name: Upload scan result
+        uses: ./
+        with:
+          json_file: ${{inputs.json_file}}
+          url: ${{inputs.url}}
+          user: ${{inputs.user}}
+          password: ${{inputs.password}}
+          token: ${{inputs.token}}
+          token_type: ${{inputs.token_type}}
+          ca_fingerprint: ${{inputs.ca_fingerprint}}
+          disable_ssl_validation: ${{inputs.disable_ssl_validation}}
+          kibana_base_path: ${{inputs.kibana_base_path}}
+          
+      
+      - name: Clean up
+        run: rm ${{inputs.json_file}}
