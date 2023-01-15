@@ -2,7 +2,7 @@ name: sast-report
 description: reporting sast result
 runs:
   using: node16
-  main: dist/action/index.js
+  main: dist/index.js
 inputs:
   json_file:
     default: results.json
