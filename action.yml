@@ -10,7 +10,7 @@ inputs:
   url:
     required: true
     description: "Database url"
-  user:
+  username:
     required: false
     description: "Username"
   password:

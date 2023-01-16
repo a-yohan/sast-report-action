@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write ./**/*.ts",
-    "build": "ncc build --quiet --source-map --no-source-map-register -o dist/ src/action.ts",
+    "build": "ncc build --quiet -o dist/ src/action.ts",
     "lint": "eslint --ext .ts src/",
     "all": "npm run format && npm run lint && npm run build"
   },

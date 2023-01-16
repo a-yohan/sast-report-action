@@ -1,4 +1,5 @@
-import es from '@elastic/elasticsearch'
+import * as core from '@actions/core'
+import * as es from '@elastic/elasticsearch'
 import { dateUtils } from './utils'
 import { ClientOptions, GenericResult } from './interfaces'
 import { mappings, settings } from './es-index-options'
@@ -82,7 +83,11 @@ export class ElasticsearchClient {
       await Promise.all(
         payloads.map(
           async (body) =>
-            await transport.request({ method, path, body }, { headers })
+            await transport
+              .request({ method, path, body }, { headers })
+              .catch((error) => {
+                core.error(error.message)
+              })
         )
       )
       payloads = remaining
@@ -93,8 +98,10 @@ export class ElasticsearchClient {
 
   private async initIndex(): Promise<string> {
     const index = `${INDEX_PREFIX}-${dateUtils.getCurrentDate()}`
+    core.info('initializing index')
     const indexEsists = await this.esClient.indices.exists({ index })
     if (!indexEsists) {
+      core.info('creating index')
       await this.esClient.indices.create({
         index,
         settings,

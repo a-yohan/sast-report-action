@@ -11,11 +11,16 @@ async function run(): Promise<void> {
     token: core.getInput('token'),
     username: core.getInput('username'),
     password: core.getInput('password'),
-    tokenType: core.getInput('tokenType'),
+    tokenType: core.getInput('token_type'),
     caFingerprint: core.getInput('ca_fingerprint'),
     disableSslValidation: core.getBooleanInput('disable_ssl_validation')
   })
+  core.startGroup('repo')
   const repo: Repo = actionUtils.getRepoFromEnv()
+  core.debug(`name: ${repo.name}`)
+  core.debug(`sha: ${repo.sha ?? ''}`)
+  core.debug(`ref: ${repo.ref ?? ''}`)
+  core.endGroup()
   core.info(`reading semgrep result from ${jsonFile}`)
   const semgrepJson: SemgrepJson = semgrepUtils.semgrepfromJson(jsonFile)
   core.info('processing data')
