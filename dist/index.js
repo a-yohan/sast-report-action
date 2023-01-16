@@ -40151,7 +40151,7 @@ async function run() {
     const result = utils_1.semgrepUtils.denormalizeSemgrepResult(semgrepJson, repo);
     core.info(`sending ${result.length} records`);
     await es.send(result);
-    core.info(`${reportUrl}?_g=(filters:!((query:(match_phrase:(repo.sha:'${repo.sha}')))))`);
+    core.info(`${reportUrl}?_g=(filters:!((query:(match_phrase:(repo.sha:${repo.sha})))))`);
 }
 run().catch((error) => {
     core.setFailed(error);
