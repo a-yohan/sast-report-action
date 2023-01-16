@@ -9,7 +9,7 @@ export function getRequiredEnvParam(name: string): string {
 
 export function getRepoFromEnv(): Repo {
   const githubRepo = getRequiredEnvParam('GITHUB_REPOSITORY')
-  const githubUrl = getRequiredEnvParam('GITHUB_REF')
+  const githubUrl = getRequiredEnvParam('GITHUB_SERVER_URL')
   return {
     name: githubRepo,
     ref: getRequiredEnvParam('GITHUB_REF'),

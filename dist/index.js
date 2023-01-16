@@ -40135,7 +40135,7 @@ async function run() {
         token: core.getInput('token'),
         username: core.getInput('username'),
         password: core.getInput('password'),
-        tokenType: core.getInput('tokenType'),
+        tokenType: core.getInput('token_type'),
         caFingerprint: core.getInput('ca_fingerprint'),
         disableSslValidation: core.getBooleanInput('disable_ssl_validation')
     });
@@ -40369,7 +40369,7 @@ function getRequiredEnvParam(name) {
 exports.getRequiredEnvParam = getRequiredEnvParam;
 function getRepoFromEnv() {
     const githubRepo = getRequiredEnvParam('GITHUB_REPOSITORY');
-    const githubUrl = getRequiredEnvParam('GITHUB_REF');
+    const githubUrl = getRequiredEnvParam('GITHUB_SERVER_URL');
     return {
         name: githubRepo,
         ref: getRequiredEnvParam('GITHUB_REF'),
